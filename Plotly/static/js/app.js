@@ -8,12 +8,15 @@ d3.json("data/samples.json").then((importedData) => {
 
   main_data = samples;
 
-  // Slice the first object for init plotting
+  // Slice the first object for init bar chart plotting
   buildBarChart(samples.slice(0, 1));
   
   // Get all ids from samples
   builDropDownMenu(samples.map(obj => obj.id));
-    
+  
+  // Slice the first object for init bubble chart
+  buildBubbleChart(samples.slice(0, 1));
+
 });
 
 function buildBarChart(sample) {
@@ -83,6 +86,16 @@ function optionChanged() {
 
   console.log(selectedid);
 
+  // Update bar char with new selected data
+  updateBarChart(selectedid);
+
+  // Update buble char with new selected data
+  updateBubbleChart(selectedid);
+  
+}
+
+function updateBarChart(selectedid) {
+
   var otu_ids = selectedid[0].otu_ids.slice(0,10).reverse();
   
   var otu_ids_str = otu_ids.map(function(e){return "OTU " + e.toString()});
@@ -101,6 +114,58 @@ function optionChanged() {
   Plotly.restyle("bar", newdata);
 }
 
+function buildBubbleChart(sample) {
 
+  var otu_ids = sample[0].otu_ids;
+  //console.log(otu_ids);
 
+  var values = sample[0].sample_values;
+  //console.log(values);
+
+  var labels = sample[0].otu_labels;
+
+  var trace1 = {
+    x: otu_ids,
+    y: values,
+    text: labels,
+    mode: 'markers',
+    marker: {
+      size: values,
+      color: otu_ids
+    }
+  };
   
+  var data = [trace1];
+  
+  var layout = {
+    xaxis: { title: "OTU ID"},
+    showlegend: false
+  };
+  
+  Plotly.newPlot('bubble', data, layout);
+}
+
+function updateBubbleChart(selectedid) {
+
+  var otu_ids = selectedid[0].otu_ids;
+  //console.log(otu_ids);
+
+  var values = selectedid[0].sample_values;
+  //console.log(values);
+
+  var labels = selectedid[0].otu_labels;
+
+  var newdata = {
+    x: [otu_ids],
+    y: [values],
+    text: [labels],
+    marker: {
+      size: values,
+      color: otu_ids
+    }
+  };
+
+  // Call function to update the chart
+  Plotly.restyle("bubble", newdata);
+
+}
