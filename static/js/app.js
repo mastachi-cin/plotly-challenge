@@ -32,6 +32,9 @@ d3.json("data/samples.json").then((importedData) => {
   // Slice the first object for init bubble chart
   buildBubbleChart(samples.slice(0, 1));
 
+  // Slice the first object for init gauge chart
+  buildGaugeChart(metadata.slice(0, 1));
+
 });
 
 function buildBarChart(sample) {
@@ -214,5 +217,9 @@ function buildDemoInfo(metadata) {
 
     // Add key-value pair for metadata to panel
     Object.entries(metadata[0]).forEach(([key, value]) => panelData.append("div").text(`${key}: ${value}`))
+
+}
+
+function buildGaugeChart(metadata) {
 
 }
