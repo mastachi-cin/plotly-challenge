@@ -117,6 +117,8 @@ function optionChanged() {
   // Update buble char with new selected data
   updateBubbleChart(selectedid);
   
+  // Update gauge chart with new selected data
+  updateGaugeChart(selectedidMD);
 }
 
 function updateBarChart(selectedid) {
@@ -212,7 +214,7 @@ function buildDemoInfo(metadata) {
     // Get reference to panel-body
     var panelData = d3.select("#sample-metadata");
 
-    // remove any previous info
+    // Remove any previous info
     panelData.html("");
 
     // Add key-value pair for metadata to panel
@@ -222,4 +224,55 @@ function buildDemoInfo(metadata) {
 
 function buildGaugeChart(metadata) {
 
+  // Get weekly washing frequency
+  var wfreq = metadata[0].wfreq; 
+
+  console.log(wfreq);
+
+  // Create the data array for the plot
+  var data = [
+    {
+      domain: { x: [0, 1], y: [0, 1] },
+      value: wfreq,
+      title: { text: "Belly Button Washing Frequency" },
+      type: "indicator",
+      mode: "gauge",
+      delta: { reference: 5 },
+      gauge: { axis: { range: [0, 9] },
+              steps: [
+                { range: [0, 1], color: "lightyellow" },
+                { range: [1, 2], color: "PaleGoldenRod" },
+                { range: [2, 3], color: "DarkKhaki" },
+                { range: [3, 4], color: "DarkSeaGreen" },
+                { range: [4, 5], color: "YellowGreen" },
+                { range: [5, 6], color: "OliveDrab" },
+                { range: [6, 7], color: "SeaGreen" },
+                { range: [7, 8], color: "ForestGreen" },
+                { range: [8, 9], color: "DarkGreen" }],          
+              }
+    }
+  ];
+  
+  // Plot the chart to a div tag with id "gauge"
+  Plotly.newPlot('gauge', data);
+
 }
+
+function updateGaugeChart(selectedidMD) {
+
+  // Get weekly washing frequency
+  var wfreq = selectedidMD[0].wfreq; 
+
+  console.log(wfreq);
+
+  // Create the object with the data to be updated
+  var newdata =
+    {
+      value: wfreq
+    };
+
+  // Call function to update the chart
+  Plotly.restyle("gauge", newdata);
+
+}
+
